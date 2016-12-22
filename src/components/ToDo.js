@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import data from '../data'
-// import io from 'socket.io-client'
 
 const ALL = data.CONSTANTS.ALL,
       REMAINED = data.CONSTANTS.REMAINED,
@@ -14,13 +13,8 @@ export default class ToDo extends React.Component {
     this.state = {
       filter: ALL,
       allDone: false,
-      items:  data.items
-    };
-    // this.socket = "io('http://localhost:8080')"
-    // this.socket.on('connected', (data) => {
-    //   console.log(data)
-    // })
-    // window.io = this.socket
+      items:  [] || data.items
+    }
   }
 
   _toUpperCase (text) {
@@ -229,7 +223,7 @@ export default class ToDo extends React.Component {
             {this.renderFilters()}
           </div>
         </div>
-        <style dangerouslySetInnerHTML={ this.renderStyles()}></style>
+        <style dangerouslySetInnerHTML={this.renderStyles()}></style>
       </div>
     )
   }
