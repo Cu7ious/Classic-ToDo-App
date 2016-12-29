@@ -1,34 +1,36 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Sortable from 'react-sortablejs';
 
+import utils from '../utils'
 import data from '../data'
 
 const ALL = data.CONSTANTS.ALL,
       REMAINED = data.CONSTANTS.REMAINED,
-      COMPLETED = data.CONSTANTS.COMPLETED
+      COMPLETED = data.CONSTANTS.COMPLETED,
+      MAIN_COLOR = data.CONSTANTS.MAIN_COLOR
 
 export default class ToDo extends React.Component {
 
   componentWillMount () {
+    let storage = JSON.parse(localStorage.getItem('state'))
+    storage = storage ? storage.items : []
+
     this.state = {
       filter: ALL,
       allDone: false,
-      items:  [] || data.items
+      items: storage
     }
   }
 
-  _toUpperCase (text) {
-    text = (text.charAt(0) === ' ') ? text.replace(' ', '') : text
-    return text.replace(
-      text.charAt(0),
-      text.charAt(0).toUpperCase()
-    )
+  componentDidUpdate () {
+    localStorage.setItem('state', JSON.stringify(this.state))
   }
 
   addItem (e) {
     if (e.keyCode == 13 && e.target.value) {
       this.state.items.unshift({
-        text: this._toUpperCase(e.target.value),
+        text: utils.capitalize(e.target.value),
         done: false,
         editing: false
       })
@@ -52,7 +54,7 @@ export default class ToDo extends React.Component {
   }
 
   editItem (index, e) {
-    this.state.items[index].text = this._toUpperCase(e.target.value)
+    this.state.items[index].text = utils.capitalize(e.target.value)
     this.setState({items: this.state.items})
   }
 
@@ -105,6 +107,39 @@ export default class ToDo extends React.Component {
     }
   }
 
+  clearAllCompleted (e) {
+    e.preventDefault()
+    this.state.items = this.state.items.filter((item) => {
+      return item.done !== true
+    })
+    this.setState(this.state.items)
+  }
+
+  updaterecipesOrder (o, c, event) {
+    const result = utils.arrayMoveItem(this.state.items, event.oldIndex, event.newIndex)
+    this.setState({
+      items: result
+    })
+  }
+
+  pasteDummyData () {
+    this.setState({
+      filter: ALL,
+      allDone: false,
+      items:  data.items
+    })
+  }
+
+  clearAllData () {
+    const state = {
+      filter: ALL,
+      allDone: false,
+      items: []
+    }
+    localStorage.setItem('state', JSON.stringify(state))
+    this.setState(state)
+  }
+
   renderItems () {
     return this.filterItems(this.state.filter)
       .map((item, index) => {
@@ -127,7 +162,7 @@ export default class ToDo extends React.Component {
             : {circle: 'rgba(0, 0, 0, 0.1)', path: 'rgba(0, 0, 0, 0)'}
 
           return (
-            <li key={index} className={classes}
+            <li key={index} className={classes} data-id={index}
               onDoubleClick={this.setItemIsEditable.bind(this, index)}
             >
               <svg
@@ -150,14 +185,6 @@ export default class ToDo extends React.Component {
           )
         }
       })
-  }
-
-  clearAllCompleted (e) {
-    e.preventDefault()
-    this.state.items = this.state.items.filter((item) => {
-      return item.done !== true
-    })
-    this.setState(this.state.items)
   }
 
   renderItemsForm () {
@@ -200,11 +227,22 @@ export default class ToDo extends React.Component {
     return false;
   }
 
+  renderButtons () {
+    return (
+      <nav className='material-buttons'>
+        <ul>
+          <li id='clear-all-data' onClick={this.clearAllData.bind(this)} className='secondary'>&#x021BA;<span>Clear all data</span></li>
+          <li id='paste-dummy-data' onClick={this.pasteDummyData.bind(this)}>&crarr;<span>Paste dummy data</span></li>
+        </ul>
+      </nav>
+    )
+  }
+
   renderStyles () {
     return {__html:`
-      .filters-block-wrapper .filters-block.${ALL} button:first-child {background-color: #ce1e00; color: #fff;}
-      .filters-block-wrapper .filters-block.${REMAINED} button:nth-child(2) {background-color: #ce1e00; color: #fff;}
-      .filters-block-wrapper .filters-block.${COMPLETED} button:last-child {background-color: #ce1e00; color: #fff;}
+      .filters-block-wrapper .filters-block.${ALL} button:first-child {background-color: ${MAIN_COLOR}; color: #fff;}
+      .filters-block-wrapper .filters-block.${REMAINED} button:nth-child(2) {background-color: ${MAIN_COLOR}; color: #fff;}
+      .filters-block-wrapper .filters-block.${COMPLETED} button:last-child {background-color: ${MAIN_COLOR}; color: #fff;}
     `}
   }
 
@@ -217,12 +255,16 @@ export default class ToDo extends React.Component {
         <div className="todo-app">
           <div className="dynamic-block">
             {this.renderItemsForm()}
-            <ul>
+            <Sortable
+              tag="ul"
+              onChange={this.updaterecipesOrder.bind(this)}
+            >
               {this.renderItems()}
-            </ul>
+            </Sortable>
             {this.renderFilters()}
           </div>
         </div>
+        {this.renderButtons()}
         <style dangerouslySetInnerHTML={this.renderStyles()}></style>
       </div>
     )

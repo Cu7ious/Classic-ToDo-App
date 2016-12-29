@@ -2,11 +2,13 @@ export default {
   CONSTANTS: {
     ALL: 'all',
     REMAINED: 'remained',
-    COMPLETED: 'completed'
+    COMPLETED: 'completed',
+    MAIN_COLOR: '#ce1e00',
+    MAIN_COLOR_DARK: '#a00000'
   },
   items: [
-    {text: 'Add persistency layer to the App', done: false, editing: false},
-    {text: 'Develop To-Do App with React', done: false, editing: false},
-    {text: 'Assemble environment for App', done: false, editing: false}
+    {text: 'Wake Up', done: false, editing: false},
+    {text: 'Drink coffee', done: false, editing: false},
+    {text: 'Check https://angel.co', done: false, editing: false}
   ]
 }
