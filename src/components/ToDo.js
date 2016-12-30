@@ -13,7 +13,7 @@ const ALL = data.CONSTANTS.ALL,
 export default class ToDo extends React.Component {
 
   componentWillMount () {
-    let storage = JSON.parse(localStorage.getItem('state'))
+    let storage = JSON.parse(localStorage.getItem('classicToDoState'))
     storage = storage ? storage.items : []
 
     this.state = {
@@ -24,7 +24,7 @@ export default class ToDo extends React.Component {
   }
 
   componentDidUpdate () {
-    localStorage.setItem('state', JSON.stringify(this.state))
+    localStorage.setItem('classicToDoState', JSON.stringify(this.state))
   }
 
   addItem (e) {
@@ -136,7 +136,7 @@ export default class ToDo extends React.Component {
       allDone: false,
       items: []
     }
-    localStorage.setItem('state', JSON.stringify(state))
+    localStorage.setItem('classicToDoState', JSON.stringify(state))
     this.setState(state)
   }
 
