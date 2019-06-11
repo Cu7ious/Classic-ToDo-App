@@ -1,0 +1,117 @@
+import { css } from 'emotion';
+import React, { useState } from 'react';
+
+import { TodoItem } from '../../../data';
+
+interface TodoItemProps {
+  item: TodoItem;
+  index: number;
+  actions: any;
+}
+
+const input = css`
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  position: relative;
+  height: 56px;
+  font-size: 30px;
+  font-weight: 100;
+  line-height: 40px;
+  padding: 0 0 0 60px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+`;
+
+const textWrapper = css`
+  padding: 0 60px;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+`;
+
+const toggleDone = css`
+  position: absolute;
+  color: transparent;
+  border-radius: 50px;
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  margin: 8px 0 0 10px;
+  text-align: center;
+  line-height: 38px;
+`;
+
+const listItem = css`
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 55px;
+  font-size: 30px;
+  font-weight: 100;
+  line-height: 55px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`;
+
+const isDone = css`
+  text-decoration: line-through;
+  color: #bbb;
+`;
+
+const remove = css`
+  color: rgba(181, 24, 24, 0.7);
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 20px;
+
+  &:hover {
+    color: rgba(181, 24, 24, 1);
+  }
+`;
+
+function renderSVG (isDone: boolean) {
+  const circleColor = isDone ? '#bddad5' : 'rgba(0, 0, 0, 0.1)';
+  return (
+    <svg width="36" height="36" viewBox="-10 -18 100 135">
+      <circle cx="50" cy="50" r="50" fill="none" stroke={circleColor} strokeWidth="3" />
+      {isDone && <path fill="#5dc2af" d="M72 25L42 71 27 56l-4 4 20 20 34-52z" />}
+    </svg>
+  );
+}
+
+function renderRemoveButton (index: number, action: any) {
+  return <span className={remove} onClick={() => action(index)}>&#x000D7;</span>;
+}
+
+export default (props: TodoItemProps) => {
+  const [hover, setHover] = useState(false);
+  const toggleHover = () => setHover(!hover);
+
+  return props.item.editing ? (
+    <input
+      className={input}
+      autoFocus={true}
+      value={props.item.text}
+      type="text"
+      onChange={e => props.actions.editItem(props.index, e)}
+      onKeyUp={e => props.actions.saveEditedItem(props.index, e)}
+      onBlur={e => props.actions.saveEditedItem(props.index, e)}
+    />
+  ) : (
+    <li
+      className={props.item.done ? `${listItem} ${isDone}` : listItem}
+      onDoubleClick={() => props.actions.setItemIsEditable(props.index)}
+      onMouseEnter={toggleHover}
+      onMouseLeave={toggleHover}
+    >
+      <span className={toggleDone} onClick={() => props.actions.toggleMarkAsDone(props.index)}>
+        {renderSVG(props.item.done)}
+      </span>
+      <span className={textWrapper}>{props.item.text}</span>
+      {hover && renderRemoveButton(props.index, props.actions.removeItem)}
+    </li>
+  )
+};
