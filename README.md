@@ -6,9 +6,9 @@ The project was built in 2019 for the presentation, which purpose was to illustr
 
 ## Stack
 
-1. TypeScript
-2. React
-3. Vite(https://vitejs.dev/)
+1. [TypeScript](https://www.typescriptlang.org/)
+2. [React](https://react.dev/)
+3. [Vite](https://vitejs.dev/)
 4. [Emotion](https://emotion.sh/docs/introduction) css-in-js.
 
 ## Instructions
