@@ -1,13 +1,14 @@
-import { css } from 'emotion';
-import React, { useCallback, useContext } from 'react';
+import { css } from '@emotion/react';
+import { useCallback, useContext } from 'react';
 
-import { AppContext, Filter, THEME_COLORS, useTheme } from '../../../data';
+import { AppContext, Filter, THEME_COLORS, useTheme } from '~/data';
 
 const filtersBlock = css`
 display: inline-block;
 min-width: 200px;
+`;
 
-button {
+const button = css`
   margin: 0 3px;
   padding: 10px;
   border: 0;
@@ -22,7 +23,6 @@ button {
   &:active {
     box-shadow: rgba(0, 0, 0, 0.117647) 0 0;
   }
-}
 `;
 
 export default function Filters () {
@@ -34,20 +34,23 @@ export default function Filters () {
     borderBottomColor: `${(THEME_COLORS as any)[appTheme].MAIN_COLOR_DARK}`
   };
   return (
-    <div className={filtersBlock}>
+    <div css={filtersBlock}>
       <button
+        css={button}
         style={state.filter === Filter.ALL ? activeBtn : undefined}
         onClick={useCallback(() => state.setState({ ...state, filter: Filter.ALL }), [state])}
       >
         All
       </button>
       <button
+        css={button}
         style={state.filter === Filter.REMAINED ? activeBtn : undefined}
         onClick={useCallback(() => state.setState({ ...state, filter: Filter.REMAINED }), [state])}
       >
         Remained
       </button>
       <button
+        css={button}
         style={state.filter === Filter.COMPLETED ? activeBtn : undefined}
         onClick={useCallback(() => state.setState({ ...state, filter: Filter.COMPLETED }), [state])}
       >

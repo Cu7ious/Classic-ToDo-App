@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-# Lazy wrapper on top of yarn
-
-yarn start
+# Lazy wrapper on top of npm command
+npm run dev

@@ -1,5 +1,4 @@
-import { css } from 'emotion';
-import React from 'react';
+import { css } from '@emotion/react';
 
 const inputForm = css`
   display: inline-block;
@@ -45,11 +44,11 @@ interface InputBoxProps {
 }
 
 const InputBox = (props: InputBoxProps) => (
-  <div className={inputForm}>
-    {!props.isEmpty && <span className={control} onClick={props.markAllAsDone}>&#x025BE;</span>}
+  <div css={inputForm}>
+    {!props.isEmpty && <span css={control} onClick={props.markAllAsDone}>&#x025BE;</span>}
     <input
       autoFocus={true}
-      className={input}
+      css={input}
       onKeyUp={props.addItem}
       type="text"
     />

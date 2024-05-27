@@ -1,16 +1,17 @@
-import { AppContext, defaultState, ThemeProvider, TodoItem, TodoState } from 'data';
-import { css } from 'emotion';
-import React, { useContext, useEffect, useState } from 'react';
-import { capitalize } from 'utils';
+import { AppContext, defaultState, ThemeProvider, TodoItem, TodoState } from "~/data";
+import { css } from "@emotion/react";
+import { useContext, useEffect, useState } from "react";
+import { capitalize } from "~/utils";
 
-import AppControls from './Application/Controls';
-import InputForm from './Application/InputForm';
-import Header from './Application/Layout/Header';
-import MaterialButtons from './Application/Layout/MaterialButtons';
-import Panel from './Application/Layout/Panel';
-import Sidebar from './Application/Layout/Sidebar';
-import ThemeSwitcher from './Application/Layout/ThemeSwitcher';
-import TodoItems from './Application/TodoItems';
+import AppControls from "./components/Controls";
+import InputForm from "./components/InputForm";
+import Header from "./components/Layout/Header";
+import MaterialButtons from "./components/Layout/MaterialButtons";
+import Panel from "./components/Layout/Panel";
+import Sidebar from "./components/Layout/Sidebar";
+import ThemeSwitcher from "./components/Layout/ThemeSwitcher";
+import TodoItems from "./components/TodoItems";
+import { log } from "console";
 
 const todoApp = css`
   padding: 55px 0 0;
@@ -29,7 +30,6 @@ const todoApp = css`
     ul li {
       font-size: 20px !important;
     }
-
   }
 `;
 
@@ -55,46 +55,47 @@ const appWrapper = css`
   }
 `;
 
-export default function App () {
+export default function App() {
   const [state, setState] = useState<TodoState>(useContext<TodoState>(AppContext));
   const [activePanel, setActivePanel] = useState(false);
 
   function setActivePanelEffect(value: boolean) {
-    document.body.classList.toggle('global-sidebar-is-active');
+    document.body.classList.toggle("global-sidebar-is-active");
     setActivePanel(value);
   }
 
   // Local Storage
   useEffect(() => {
-    console.log('State has changed');
-    localStorage.setItem('classicToDoState', JSON.stringify(state));
+    console.log("State has changed");
+    localStorage.setItem("classicToDoState", JSON.stringify(state));
   }, [state]);
 
   // Global Sidebar
   useEffect(() => {
-    function callback (e: KeyboardEvent) {
-      if (e.type === 'keyup' && e.keyCode === 27) {
+    function callback(e: KeyboardEvent) {
+      console.log(e.code);
+      if (e.type === "keyup" && e.code === "Escape") {
         setActivePanelEffect(false);
       }
-    };
+    }
 
-    window.addEventListener('keyup', callback);
+    window.addEventListener("keyup", callback);
 
     return () => {
-      window.removeEventListener('keyup', callback);
-    }
+      window.removeEventListener("keyup", callback);
+    };
   });
 
   function addItem(e: any) {
-    if (e.keyCode === 13 && e.target.value) {
+    if (e.code === "Enter" && e.target.value) {
       const items = state.items;
       items.unshift({
         text: capitalize(e.target.value),
         done: false,
-        editing: false
-      })
+        editing: false,
+      });
       setState({ ...state, items });
-      e.target.value = '';
+      e.target.value = "";
     }
   }
 
@@ -103,10 +104,10 @@ export default function App () {
       ...state,
       allDone: !state.allDone,
       items: state.items.map((item: TodoItem) => {
-        item.done = !state.allDone
-        return item
-      })
-    })
+        item.done = !state.allDone;
+        return item;
+      }),
+    });
   }
 
   function pasteDummyData() {
@@ -116,9 +117,9 @@ export default function App () {
   function clearAllData() {
     const state = {
       ...defaultState,
-      items: []
+      items: [],
     };
-    localStorage.setItem('classicToDoState', JSON.stringify(state));
+    localStorage.setItem("classicToDoState", JSON.stringify(state));
     setState(state);
   }
 
@@ -126,11 +127,14 @@ export default function App () {
     <>
       <ThemeProvider>
         <Header setActivePanel={setActivePanelEffect} />
-        <Sidebar activePanel={activePanel} setActivePanel={setActivePanelEffect} />
+        <Sidebar
+          activePanel={activePanel}
+          setActivePanel={setActivePanelEffect}
+        />
         <Panel />
         <ThemeSwitcher />
-        <div className={todoApp}>
-          <div className={appWrapper}>
+        <div css={todoApp}>
+          <div css={appWrapper}>
             <AppContext.Provider value={{ ...state, setState }}>
               <InputForm
                 isEmpty={state.items.length === 0}

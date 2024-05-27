@@ -1,18 +1,20 @@
-import { THEME_COLORS, useTheme } from 'data';
-import { css } from 'emotion';
-import React, { useCallback } from 'react';
+import byCu7iousWatermark from '~/assets/svg/by-Cu7ious-watermark-black.svg';
+import { THEME_COLORS, useTheme } from '~/data';
+import { css } from '@emotion/react';
+import { useCallback } from 'react';
 
 const footer = css`
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   width: 100%;
   text-align: center;
 
   p {
-    margin-left: -165px;
+    margin-left: -175px;
     font-size: 12px;
     font-style: italic;
     color: #3d4255;
+    box-sizing: border-box;
   }
 
   a {
@@ -44,6 +46,7 @@ const content = css`
   }
 `;
 
+const CORRECTED_TRANSLATION = '40px';
 const sidebar = css`
   width: 400px;
   height: calc(100vh - 110px);
@@ -67,6 +70,8 @@ const sidebar = css`
 
   & ul {
     & li {
+      font-weight: 100;
+      color: #626262;
       & span {
         font-weight: bold;
       }
@@ -74,7 +79,9 @@ const sidebar = css`
   }
 
   @media screen and (max-width:600px) {
-    width: calc(100% - 60px)
+    width: calc(100% - ${CORRECTED_TRANSLATION});
+    box-sizing: border-box;
+    height: 100vh;
   }
 
   .wrapper {
@@ -105,6 +112,8 @@ const closeButton = css`
 const activeSidebar = css`
   transform: translateX(0);
   overflow-y: hidden;
+
+  @media screen and (max-width:600px) {width: 100% !important;}
 `;
 
 const magOverlay = css`
@@ -130,29 +139,33 @@ const activeOverlay = css`
 export default function Sidebar (props: any) {
   const [{ appTheme }] = useTheme();
   const color = { color: `${(THEME_COLORS as any)[appTheme].MAIN_COLOR}` }
-  const PUBLIC_URL = process.env.PUBLIC_URL;
   const closeSidebar = useCallback(() => props.setActivePanel(false), [props]);
 
   return (
     <>
-      <aside className={`${sidebar} ${props.activePanel && activeSidebar}`}>
+      <aside css={[sidebar, props.activePanel && activeSidebar]}>
         <h2 style={color}>React.js based Classic Todo App</h2>
         <h3 style={color}>with emotion and hooks</h3>
-        <button className={closeButton} onClick={closeSidebar}>⨯</button>
-        <section className={content}>
+        <button css={closeButton} onClick={closeSidebar}>⨯</button>
+        <section css={content}>
         <ul>
-          <li>Something useful here...</li>
+          <li>Cutting edge frontend stack, simplified</li>
+          <li>List goes on...</li>
         </ul>
       </section>
-        <footer className={footer}>
+        <footer css={footer}>
         <p>Designed &amp; coded with &hearts;
           <a target="_blank" rel="noopener noreferrer" href="https://cu7io.us/">
-            <img src={`${PUBLIC_URL}/assets/svg/by-Cu7ious-watermark-black.svg`} alt="Created by CU7IOUS" />
+            <img src={byCu7iousWatermark} alt="Created by CU7IOUS" />
           </a>
         </p>
         </footer>
       </aside>
-      <div className={`${magOverlay} ${props.activePanel && activeOverlay}`} id="magnet-overlay" onClick={closeSidebar} />
+      <div
+        css={[magOverlay, props.activePanel && activeOverlay]}
+        id="magnet-overlay"
+        onClick={closeSidebar}
+      />
     </>
   );
 }

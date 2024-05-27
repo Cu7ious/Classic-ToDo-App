@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-# This script builds the app and serves it on 0.0.0.0:8000
-# @NB: requires Python3
-
-yarn build && cd build && python3 -m http.server
+# This script builds the app runs it's preview
+npm run build && npm run preview

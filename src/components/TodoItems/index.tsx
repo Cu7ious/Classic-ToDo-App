@@ -1,8 +1,8 @@
-import { css } from 'emotion';
-import React, { useContext } from 'react';
+import { css } from '@emotion/react';
+import { useContext } from 'react';
 
-import { AppContext } from '../../../data';
-import { capitalize, filterItems } from '../../../utils';
+import { AppContext } from '~/data';
+import { capitalize, filterItems } from '~/utils';
 import TodoItemBox from './TodoItem';
 
 const list = css`
@@ -53,7 +53,7 @@ export default function TodoItems () {
   }
 
   return state.items.length > 0 ? (
-    <ul className={list}>
+    <ul css={list}>
       {/* </Sortable> */}
       {filterItems(state.items, state.filter)
         .map((item, index) => (

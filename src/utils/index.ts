@@ -1,4 +1,4 @@
-import { Filter, TodoItem } from '../data';
+import { Filter, TodoItem } from '~/data';
 
 export function capitalize (text: string): string {
   return text.trim()

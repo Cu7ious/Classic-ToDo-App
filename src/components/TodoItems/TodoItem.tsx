@@ -1,7 +1,7 @@
-import { css } from 'emotion';
-import React, { useState } from 'react';
+import { css } from '@emotion/react';
+import { useState } from 'react';
 
-import { TodoItem } from '../../../data';
+import { TodoItem } from '~/data';
 
 interface TodoItemProps {
   item: TodoItem;
@@ -83,7 +83,7 @@ function renderSVG (isDone: boolean) {
 }
 
 function renderRemoveButton (index: number, action: any) {
-  return <span className={remove} onClick={() => action(index)}>&#x000D7;</span>;
+  return <span css={remove} onClick={() => action(index)}>&#x000D7;</span>;
 }
 
 export default (props: TodoItemProps) => {
@@ -92,7 +92,7 @@ export default (props: TodoItemProps) => {
 
   return props.item.editing ? (
     <input
-      className={input}
+      css={input}
       autoFocus={true}
       value={props.item.text}
       type="text"
@@ -102,15 +102,15 @@ export default (props: TodoItemProps) => {
     />
   ) : (
     <li
-      className={props.item.done ? `${listItem} ${isDone}` : listItem}
+      css={[listItem, props.item.done && isDone]}
       onDoubleClick={() => props.actions.setItemIsEditable(props.index)}
       onMouseEnter={toggleHover}
       onMouseLeave={toggleHover}
     >
-      <span className={toggleDone} onClick={() => props.actions.toggleMarkAsDone(props.index)}>
+      <span css={toggleDone} onClick={() => props.actions.toggleMarkAsDone(props.index)}>
         {renderSVG(props.item.done)}
       </span>
-      <span className={textWrapper}>{props.item.text}</span>
+      <span css={textWrapper}>{props.item.text}</span>
       {hover && renderRemoveButton(props.index, props.actions.removeItem)}
     </li>
   )

@@ -1,5 +1,5 @@
-import { THEME_COLORS, useTheme } from 'data';
-import { css } from 'emotion';
+import { THEME_COLORS, useTheme } from '~/data';
+import { css } from '@emotion/react';
 import React from 'react';
 
 interface MaterialButtonsProps {
@@ -12,17 +12,17 @@ const materialButtons = css`
   right: 35px;
   bottom: 20px;
   list-style: none;
+`;
 
-  span {
-    position: absolute;
-    font-size: 12px;
-    padding: 2px 8px;
-    top: 5px;
-    background-color: rgba(43, 43, 43, 0.67);
-    max-height: 20px;
-    border-radius: 3px;
-    line-height: 21px;
-  }
+const commonSpanCSS = css`
+  position: absolute;
+  font-size: 12px;
+  padding: 2px 8px;
+  top: 5px;
+  background-color: rgba(43, 43, 43, 0.67);
+  max-height: 20px;
+  border-radius: 3px;
+  line-height: 21px;
 `;
 
 const listItem = css`
@@ -43,7 +43,7 @@ const secondaryButton = css`
   height: 34px;
   border-radius: 36px;
   font-size: 22px;
-  line-height: 40px;
+  line-height: 33px;
   margin-left: 10px;
   margin-bottom: 10px;
 `;
@@ -67,17 +67,17 @@ const MaterialButtons = (props: MaterialButtonsProps) => {
   `;
 
   return (
-    <ul className={materialButtons}>
+    <ul css={materialButtons}>
       <li
         onClick={props.clearAllData}
-        className={`${listItem} ${secondaryButton} ${listItemColors}`}
+        css={[listItem, secondaryButton, listItemColors]}
       >
         &#x021BA;
-        <span className={clearAllData}>Clear all data</span>
+        <span css={[clearAllData, commonSpanCSS]}>Clear all data</span>
       </li>
-      <li onClick={props.pasteDummyData} className={`${listItem} ${listItemColors}`}>
+      <li onClick={props.pasteDummyData} css={[listItem, listItemColors]}>
         &crarr;
-        <span className={pasteDummyData}>Paste dummy data</span>
+        <span css={[pasteDummyData, commonSpanCSS]}>Paste dummy data</span>
       </li>
     </ul>
   );

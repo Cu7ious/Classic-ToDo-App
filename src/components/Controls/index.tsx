@@ -1,8 +1,8 @@
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import React, { useContext } from 'react';
 
-import { AppContext, Filter } from '../../../data';
-import { filterItems } from '../../../utils';
+import { AppContext, Filter } from '~/data';
+import { filterItems } from '~/utils';
 import Filters from './Filters';
 
 const controlsCSS = css`
@@ -54,17 +54,17 @@ export default function AppControls () {
   function renderRemained(items: any): React.ReactNode {
     const remainedItems = filterItems(items, Filter.REMAINED);
     return (
-      <span className={remained}>
+      <span css={remained}>
         {remainedItems.length} {remainedItems.length === 1 ? 'item' : 'items'} left
       </span>
     );
   }
 
   return state.items.length > 0 ? (
-    <div className={controlsCSS}>
+    <div css={controlsCSS}>
       {renderRemained(state.items)}
       <Filters />
-      <button className={clearButton} onClick={clearAllCompleted}>Clear completed</button>
+      <button css={clearButton} onClick={clearAllCompleted}>Clear completed</button>
     </div>
   ) : null;
 };
