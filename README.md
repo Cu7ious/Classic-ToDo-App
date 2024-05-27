@@ -22,7 +22,7 @@ The project was built in 2019 for the presentation, which purpose was to illustr
 ### To look at production build
 
 1. `./run_build.sh`
-2. Go to http://0.0.0.0:8000/
+2. Go to [http://localhost:4173/](http://localhost:4173/)
 
 ## React + TypeScript + Vite + Emotion
 
