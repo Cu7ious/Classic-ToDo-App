@@ -17,7 +17,7 @@ The project was built in 2019 for the presentation, which purpose was to illustr
 
 1. `git clone https://github.com/Cu7ious/Classic-ToDo-App`
 2. `npm i`
-3. `./run_dev.sh`
+3. `./run_dev.sh` (assuming zsh environment)
 
 ### To look at production build
 
